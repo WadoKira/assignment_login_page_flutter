@@ -1,38 +1,78 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:student_login/screens/login_screen.dart';
-import 'package:student_login/screens/splash_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-// Defining Custom Colors
 Color primary = Color(0xff072227);
-Color secondary = Color(0xff35858B);
-Color primaryLight = Color(0xff4FBDBA);
-Color secondaryLight = Color(0xffAEFEFF);
-
-// Custom Color Defining for ThemeData
-class pallette {
-  static const MaterialColor primary =
-      const MaterialColor(0xff072227, const <int, Color>{});
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(new MaterialApp(
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Student Login Application",
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      home: new splash_screen()));
+      home: SplashScreen(),
+    );
+  }
 }
 
-class Home extends StatelessWidget {
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // You can replace this with your splash screen implementation
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  List<String> posts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPosts(); // Fetch posts when the widget is created
+  }
+
+  // Function to fetch posts from the API
+  Future<void> fetchPosts() async {
+    final response =
+    await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+    if (response.statusCode == 200) {
+      Iterable data = jsonDecode(response.body);
+      List<String> postTitles = [];
+      for (var post in data) {
+        postTitles.add(post['title']);
+      }
+      setState(() {
+        posts = postTitles;
+      });
+    } else {
+      // Handle error
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,23 +109,31 @@ class Home extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
+            // Displaying posts from the API
+            Column(
+              children: posts.map((post) => Text(post)).toList(),
+            ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
                 child: ButtonTheme(
                   minWidth: 200,
-                  child: RaisedButton(
-                    textColor: Colors.white,
-                    color: primary,
-                    child: Text("Logout",
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold)),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () {
                       logout(context);
                       Fluttertoast.showToast(msg: "Logged Out!");
                     },
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
+                    child: Text(
+                      "Logout",
+                      style:
+                      TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -96,8 +144,8 @@ class Home extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "A sutdent login/register application\n"
-                    "with firebase authentication",
+                    "A student login/register application\n"
+                        "with firebase authentication",
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -113,38 +161,46 @@ class Home extends StatelessWidget {
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => login_screen()));
+        MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
+
+  // Creating an Alert Dialog for the Info button in App Bar
+  showAlertDialog(BuildContext context) {
+    // Setting up the button
+    Widget okButton = TextButton(
+      child: Text("Ok"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // Set up the Alert Dialog
+    AlertDialog alertDialog = AlertDialog(
+      title: Text("Student Login Application"),
+      content: Text(
+        "DEVELOPED BY KIRA TECHNOLOGIES\n",
+      ),
+      actions: [okButton],
+    );
+
+    // Show the Dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alertDialog;
+      },
+    );
   }
 }
 
-// Creating an Alert Dialog for the Info button in App Bar
-showAlertDialog(BuildContext context) {
-  // Setting up the button
-  Widget okButton = TextButton(
-    child: Text("Ok"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
-  // Set up the Alert Dialog
-  AlertDialog alertDialog = AlertDialog(
-    title: Text("Student Login Application"),
-    content: Text(
-        "This is the simple Student login application with firebase authentication\n"
-        "\nDeveloped by\n"
-        "Ruban Gino Singh - URK20CS2001\n"
-        "Joewin Sam - URK20CS1054\n"
-        "Magrin Fenisha - URK20CS1042\n"
-        "Jerusha - URK20CS1035\n"),
-    actions: [okButton],
-  );
-
-  // Show the Dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alertDialog;
-    },
-  );
+class LoginScreen extends StatelessWidget {
+  // Replace this with your login screen implementation
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text("Login Screen"),
+      ),
+    );
+  }
 }

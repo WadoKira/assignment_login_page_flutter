@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "78632549344",
-    "project_id": "studentloginauth",
-    "storage_bucket": "studentloginauth.appspot.com"
+    "project_number": "593286442145",
+    "project_id": "assignment-avtechfin",
+    "storage_bucket": "assignment-avtechfin.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:78632549344:android:9c76c06f850c2d8bce8985",
+        "mobilesdk_app_id": "1:593286442145:android:ed4df89e8250e2c78e94e0",
         "android_client_info": {
-          "package_name": "com.studentlogin.student_login"
+          "package_name": "com.avtechfin.assignment"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "78632549344-q4kv6eo97a9um6hjj7quc09bb8l9psp7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.studentlogin.student_login",
-            "certificate_hash": "f7a22b5b192a2562bab3ac62e3b3196a4c197a6f"
-          }
-        },
-        {
-          "client_id": "78632549344-2r7dh7it99ol83lpmhqtch6guc7gm71e.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDFcwtYH1k8eoFTOZuKohxYfgKwjBv9zlg"
+          "current_key": "AIzaSyD6-BzhUd900QGHjMAF7dEkA02Iqop31HE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "78632549344-2r7dh7it99ol83lpmhqtch6guc7gm71e.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
